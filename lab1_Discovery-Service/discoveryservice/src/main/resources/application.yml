@@ -1,0 +1,16 @@
+
+# Eureka서버는 웹 서비스의 성격으로 구동됨. 따라서 포트 번호를 지정
+server:
+  port: 8761
+
+
+spring:
+  application:
+    name: discoveryservice # Microservice의 고유ID
+
+# 외부 다른 마이크로서비스와 정보를 주고받을 필요는 없기 때문에 자기 자신은 등록하지 않는다.
+# 자기 자신을 마이크로서비스로 등록하지 않는 것.
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
