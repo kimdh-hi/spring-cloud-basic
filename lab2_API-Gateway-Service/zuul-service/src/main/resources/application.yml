@@ -5,8 +5,12 @@ spring:
   application:
     name: my-zuul-service
 
+# Routing
 zuul:
   routes:
     first-service:
-      path: /first-service/**
-      url: http://localhost:8081
+      path: /first-service/** # /first-service로 들어오는 요청을
+      url: http://localhost:8081 # 여기로 라우팅
+    second-service:
+      path: /second-service/**
+      url: http://localhost:8082

@@ -1,1 +1,44 @@
 
+server:
+  port: 8000
+spring:
+  application:
+    name: apigateway-service
+  cloud:
+    gateway:
+      default-filters: # Global Filter
+        - name: GlobalFilter # Global Filter Class name
+          args: # Initialize Global Filter Config class
+            message: Global Filter Start
+            preLogger: true
+            postLogger: true
+      routes:
+        - id: first-service
+          uri: lb://MY-FIRST-SERVICE # 네이밍 서버에서 서비스의 이름으로 검색
+          predicates:
+            - Path=/first-service/**
+          filters:
+#            - AddRequestHeader=Test-req-Header,Test # key-value
+#            - AddResponseHeader=Test-res-Header, Test
+            - CustomFilter
+        - id: second-service
+          #uri: http://localhost:8082/
+          uri: lb://MY-SECOND-SERVICE # 네이밍 서버에서 서비스의 이름으로 검색
+          predicates:
+            - Path=/second-service/**
+          filters:
+#            - AddRequestHeader=Test-req-Header,Test
+#            - AddResponseHeader=Test-res-Header, Test
+            - name: CustomFilter
+            - name: LoggingFilter
+              args:
+                message: Logging Filter Message
+                preLogger: true
+                postLogger: true
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
