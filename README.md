@@ -1,7 +1,7 @@
 # Spring Cloud
 
 ### lab1 Discovery Service
-- Netflix ureka service
+- Netflix eureka service
 - Random Port
 
 ### lab2 API Gateway Service

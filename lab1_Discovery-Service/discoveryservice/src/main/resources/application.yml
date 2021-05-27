@@ -1,9 +1,6 @@
 
-# Eureka서버는 웹 서비스의 성격으로 구동됨. 따라서 포트 번호를 지정
 server:
-  port: 8761
-
-
+  port: 8761 # Eureka Server 포트 설정
 spring:
   application:
     name: discoveryservice # Microservice의 고유ID

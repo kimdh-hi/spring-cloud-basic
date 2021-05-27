@@ -9,10 +9,22 @@ eureka:
   instance:
     instance-id:
       ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
-      #${spring.application.name}:${server.port}
   client:
-    register-with-eureka: true # Eureka Server에 Client로 등록
+    register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://127.0.0.1:8761/eureka # eureka server url
+      defaultZone: http://127.0.0.1:8761/eureka
 
+
+#server:
+#  port: 8081
+#spring:
+#  application:
+#    name: test-service
+#
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
