@@ -46,17 +46,17 @@ spring:
     gateway:
       routes:
         - id: MY-FIRST-SERVICE
-          uri: http://localhost:8081/ # 2. 8081포트에서 처리한다.
+          uri: lb://MY-FIRST-SERVICE
           predicates:
-            Path=/first-service/** # 1. /first-service로 오는 모든 요청은
+            Path=/first-service/**
         - id: MY-SECOND-SERVICE
-          uri: http://localhost:8082/
+          uri: lb://MY-SECOND-SERVICE
           predicates:
             Path=/second-service/**
 eureka:
   client:
-    fetch-registry: false # 단순 테스트를 위해 eureka서버에 등록하지 않음
-    register-with-eureka: false # 단순 테스트를 위해 eureka서버에 등록하지 않음
+    fetch-registry: true
+    register-with-eureka: true
     service-url:
       defaultZone: http://localhost:8761/eureka
 

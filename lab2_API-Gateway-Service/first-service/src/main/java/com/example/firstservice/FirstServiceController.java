@@ -12,12 +12,18 @@ import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
-// @RequestMapping("/") // Zuul Mapping
 @RequestMapping("/first-service")
 @RequiredArgsConstructor
 public class FirstServiceController {
 
     private final Environment env;
+
+    // Load Balance Test
+    @GetMapping("/port")
+    public String printPortForCheckLoadBalancer(HttpServletRequest request) {
+        log.info("First Service port -> {} ",env.getProperty("local.server.port"));
+        return String.format("First Service on %s", request.getServerPort());
+    }
 
     @GetMapping("/welcome")
     public String welcome() {
@@ -34,12 +40,5 @@ public class FirstServiceController {
     public String customFilterCheck() {
         log.info("First-Service Called");
         return "First Service Custom Filter Test";
-    }
-
-    // Load Balance Test
-    @GetMapping("/port")
-    public String printPortforCheckLoadBalancer(HttpServletRequest request) {
-        log.info("First Service port -> {} ",env.getProperty("local.server.port"));
-        return String.format("First Service on %s", request.getServerPort());
     }
 }

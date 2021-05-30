@@ -7,19 +7,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.http.HttpRequest;
+
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
-public class UserController {
+@RequestMapping("/user-service")
+public class TestController {
 
     private final Environment env;
 
     private final Greeting greeting;
 
 
-    @GetMapping("/check")
+    @GetMapping("/port-check")
     public String check() {
-        return "Good!!";
+        return String.format("UserService Port : %s", env.getProperty("local.server.port"));
     }
 
     @GetMapping("/welcome1")

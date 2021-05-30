@@ -6,13 +6,22 @@ spring:
     name: catalog-service
   h2:
     console:
-      path: /h2-console
       enabled: true
       settings:
         web-allow-others: true
+      path: /h2-console
   datasource:
-    url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+
+
 
 eureka:
   instance:
@@ -21,8 +30,10 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://127.0.0.1/eureka
+      defaultZone: http://127.0.0.1:8761/eureka
+
 
 logging:
   level:
-    com.example.catalogservice: debug
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
