@@ -11,7 +11,8 @@ import java.net.http.HttpRequest;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/user-service")
+//@RequestMapping("/user-service")
+@RequestMapping("/")
 public class TestController {
 
     private final Environment env;

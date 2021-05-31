@@ -28,4 +28,10 @@ eureka:
 greeting:
   message: welcome to user-service
 
+# JWT
+token:
+  expiration_time: 86400000
+  secret: user_token
+
+
 
