@@ -42,12 +42,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             throws AuthenticationException {
 
         try {
+            // Login 요청 정보 변환
             RequestLogin credential = new ObjectMapper().readValue(request.getInputStream(), RequestLogin.class);
 
             return getAuthenticationManager().authenticate( // created token managed by Authentication manager
                     new UsernamePasswordAuthenticationToken( // Create Authentication Token
-                            credential.getEmail(),
-                            credential.getPassword(),
+                            credential.getEmail(), // 로그인 정보 (ID)
+                            credential.getPassword(), // 로그인 정보 (Password)
                             new ArrayList<>()
                     )
             );
@@ -61,15 +62,19 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
+        // 인증에 성공한 사용자
         String username = ((User) authResult.getPrincipal()).getUsername();
         UserDto userDto = userService.getUserDetailsByUsername(username);
 
+        // JWT 생성
         String jwtToken = Jwts.builder()
                 .setSubject(userDto.getUserId())
-                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(env.getProperty("token.expiration_time"))))
-                .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret"))
-                .compact();
+                .setExpiration // 토큰 만료 시간
+                        (new Date(System.currentTimeMillis() + Long.parseLong(env.getProperty("token.expiration_time"))))
+                .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret")) // 토큰 암호화
+                .compact(); // 토큰 생성
 
+        // 클라이언트에게 JWT응답
         response.addHeader("token", jwtToken);
         response.addHeader("userId", userDto.getUserId());
 
