@@ -19,6 +19,14 @@ public class TestController {
 
     private final Greeting greeting;
 
+    @GetMapping("/config-test")
+    public String serverCheck()  {
+        return String.format("User-Service " +
+                ", port(local.server.port) = " + env.getProperty("local.server.port") +
+                ", port(server.port) = " + env.getProperty("server.port") +
+                ", token.secret = " + env.getProperty("token.secret") +
+                ", token.expiration_time = " + env.getProperty("token.expiration_time"));
+    }
 
     @GetMapping("/port-check")
     public String check() {

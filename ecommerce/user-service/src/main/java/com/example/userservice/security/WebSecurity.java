@@ -22,9 +22,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     // Authorization
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers("/actuator/**").permitAll();
         http.csrf().disable()
                 .authorizeRequests().antMatchers("/**")
-                .hasIpAddress("172.30.1.50")
+                .hasIpAddress("172.30.1.28")
                 .and()
                 .addFilter(getAuthenticationFilter());
 
