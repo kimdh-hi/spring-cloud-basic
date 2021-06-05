@@ -13,3 +13,15 @@
   - load balancing
 
 ### Ecommerce app  
+- Service Discovery
+  - Eureka Service
+- API Gateway Service
+  - Spring cloud gateway
+- User-service (Microservice 1)
+  - Spring Security
+  - JWT
+- Catalog-service (Microservice 2)
+- Orders-service (Microservice 3)
+- Configuration Service
+  - Spring cloud config (Local git repo, Remote git repo, Native file repo)
+  - Spring cloud bus (RabbitMQ, AMQP)

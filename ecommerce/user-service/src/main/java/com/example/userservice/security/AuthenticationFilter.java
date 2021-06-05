@@ -66,6 +66,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String username = ((User) authResult.getPrincipal()).getUsername();
         UserDto userDto = userService.getUserDetailsByUsername(username);
 
+        log.info("*************"+env.getProperty("token.secret"));
+
         // JWT 생성
         String jwtToken = Jwts.builder()
                 .setSubject(userDto.getUserId())
