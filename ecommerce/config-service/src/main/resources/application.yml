@@ -9,7 +9,7 @@ spring:
     config:
       server:
         git:
-          uri: file:///Users/jeonhyeji/Documents/spring/spring-cloud-config
+          uri: file://${user.home}/Documents/spring/spring-cloud-config
   rabbitmq:
     host: 127.0.0.1
     port: 5672

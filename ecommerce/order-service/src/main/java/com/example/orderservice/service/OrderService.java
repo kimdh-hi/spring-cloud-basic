@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +22,19 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
+    @Transactional
     public OrderDto createOrder(OrderDto orderDto) {
         orderDto.setOrderId(UUID.randomUUID().toString());
         orderDto.setTotalPrice(orderDto.getPrice() * orderDto.getQuantity());
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
         OrderEntity orderEntity = mapper.map(orderDto, OrderEntity.class);
+
         orderRepository.save(orderEntity);
-        return mapper.map(orderEntity, OrderDto.class);
+
+        OrderDto result = mapper.map(orderEntity, OrderDto.class);
+        return result;
     }
 
     public List<OrderDto> getAllOrders() {
@@ -42,7 +47,11 @@ public class OrderService {
     }
 
     public OrderDto getOrderByOrderID(String orderId) {
-        return new ModelMapper().map(orderRepository.findByOrderId(orderId), OrderDto.class);
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
+        OrderDto result = mapper.map(orderEntity, OrderDto.class);
+        return result;
     }
 
 

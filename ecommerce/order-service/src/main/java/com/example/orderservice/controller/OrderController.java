@@ -7,10 +7,12 @@ import com.example.orderservice.vo.ResponseOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,9 +41,15 @@ public class OrderController {
                 .collect(Collectors.toList()));
     }
 
-    @GetMapping("/orders/{orderId}")
-    public ResponseEntity<ResponseOrder> getOrderByOrderId(@PathVariable("orderId") String orderId) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ModelMapper().map(orderService.getOrderByOrderID(orderId), ResponseOrder.class));
+    @GetMapping("/orders/{userId}")
+    public ResponseEntity<List<ResponseOrder>> getOrderByOrderId(@PathVariable("userId") String userId) {
+        List<OrderDto> findOrders = orderService.getOrderByUserId(userId);
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        List<ResponseOrder> result = new ArrayList<>();
+        findOrders.forEach( o -> {
+            result.add(mapper.map(o, ResponseOrder.class));
+        });
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

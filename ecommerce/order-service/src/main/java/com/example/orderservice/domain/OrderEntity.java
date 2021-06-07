@@ -10,29 +10,23 @@ import java.util.Date;
 
 @Entity
 @Table(name = "orders")
-@Getter
+@Data
 public class OrderEntity implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
     private String productId;
 
-    @Column(nullable = false)
     private String quantity;
 
-    @Column(nullable = false)
     private Integer price;
 
-    @Column(nullable = false)
     private Integer totalPrice;
 
-    @Column(nullable = false)
-    private String userId;
-
-    @Column(nullable = false, unique = true)
     private String orderId;
+
+    private String userId;
 
     @Column(nullable = false, updatable = false, insertable = false)
     @ColumnDefault(value = "CURRENT_TIMESTAMP")
