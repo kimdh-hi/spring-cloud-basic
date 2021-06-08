@@ -2,9 +2,12 @@ package com.example.userservice.service;
 
 import com.example.userservice.domain.UserEntity;
 import com.example.userservice.dto.UserDto;
+import com.example.userservice.feign.OrderServiceFeignClient;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.vo.ResponseOrder;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.ParameterizedTypeReference;
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService{
@@ -30,6 +34,8 @@ public class UserServiceImpl implements UserService{
     private final BCryptPasswordEncoder encoder;
     private final Environment env;
     private final RestTemplate restTemplate;
+    private final OrderServiceFeignClient
+            orderServiceFeignClient;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -67,13 +73,27 @@ public class UserServiceImpl implements UserService{
         ModelMapper mapper = new ModelMapper();
         UserDto userDto = mapper.map(userEntity, UserDto.class);
 
-        // RestTemplate을 이용한 MSA간 통신
-        String url = String.format(env.getProperty("order_service.url"), userId);
-        ResponseEntity<List<ResponseOrder>> response = restTemplate.exchange(url, HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<ResponseOrder>>() {
-                });
+        /**
+         * RestTemplate를 통한 MSA간 통신
+         */
+//        String url = String.format(env.getProperty("order_service.url"), userId);
+//        ResponseEntity<List<ResponseOrder>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+//                new ParameterizedTypeReference<List<ResponseOrder>>() {
+//                });
 
-        List<ResponseOrder> orders = response.getBody();
+        /**
+         * FeignClient를 통한 MSA간 통신
+         */
+        List<ResponseOrder> orders  = null;
+
+        try{
+            //orders = orderServiceFeignClient.getOrders(userId);
+            orders = orderServiceFeignClient.getOrdersError(userId);
+        } catch (FeignException e) {
+            // 로그만을 찍으므로 예외로 인해 서비스가 멈추지 않음
+            // orders부분을 null로 하여 users를 조회 가능
+            log.error(e.getMessage());
+        }
 
         userDto.setOrders(orders);
 

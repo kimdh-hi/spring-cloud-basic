@@ -39,6 +39,10 @@ management:
       exposure:
         include: refresh, beans, health, busrefresh
 
+loggin:
+  level:
+    com.example.userservice.feign
+
 # spring cloud config를 통해 외부설정파일에서 가져오도록 함
 # JWT
 #token:
