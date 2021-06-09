@@ -10,7 +10,7 @@ import java.util.List;
 @FeignClient(name = "order-service") // 호출하고자 하는 api의 MSA이름
 public interface OrderServiceFeignClient {
 
-    @GetMapping("/order-service/orders/{userId}")
+    @GetMapping("/order-service/orderss/{userId}")
     List<ResponseOrder> getOrders(@PathVariable String userId);
 
     @GetMapping("/order-service/orders-error/{userId}")

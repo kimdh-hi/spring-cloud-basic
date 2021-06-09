@@ -84,16 +84,18 @@ public class UserServiceImpl implements UserService{
         /**
          * FeignClient를 통한 MSA간 통신
          */
-        List<ResponseOrder> orders  = null;
 
-        try{
-            //orders = orderServiceFeignClient.getOrders(userId);
-            orders = orderServiceFeignClient.getOrdersError(userId);
-        } catch (FeignException e) {
-            // 로그만을 찍으므로 예외로 인해 서비스가 멈추지 않음
-            // orders부분을 null로 하여 users를 조회 가능
-            log.error(e.getMessage());
-        }
+//        List<ResponseOrder> orders  = null;
+//        try{
+//            //orders = orderServiceFeignClient.getOrders(userId);
+//            orders = orderServiceFeignClient.getOrdersError(userId);
+//        } catch (FeignException e) {
+//            // 로그만을 찍으므로 예외로 인해 서비스가 멈추지 않음
+//            // orders부분을 null로 하여 users를 조회 가능
+//            log.error(e.getMessage());
+//        }
+
+        List<ResponseOrder> orders = orderServiceFeignClient.getOrders(userId);
 
         userDto.setOrders(orders);
 
